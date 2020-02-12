@@ -43,7 +43,7 @@ public class Waves : MonoBehaviour
         var p3 = new Vector3(Mathf.Ceil(localPos.x), 0, Mathf.Floor(localPos.z));
         var p4 = new Vector3(Mathf.Ceil(localPos.x), 0, Mathf.Ceil(localPos.z));
 
-        //clamp if the position is outside the plane
+        //clamp if the position is outside the plane for error handling
         p1.x = Mathf.Clamp(p1.x, 0, Dimension);
         p1.z = Mathf.Clamp(p1.z, 0, Dimension);
         p2.x = Mathf.Clamp(p2.x, 0, Dimension);
