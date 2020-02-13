@@ -394,9 +394,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Motor: {fileID: 619824812}
-  SteerPower: 500
-  Power: 5
-  MaxSpeed: 10
+  SteerPower: 50
+  Power: 20
+  MaxSpeed: 15
   Drag: 0.1
 --- !u!1 &447826872
 GameObject:
