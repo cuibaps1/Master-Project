@@ -47,7 +47,23 @@ public class WaterFlow : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        //default water surface
+        var newWaterLine = 0f;
+        var pointUnderWater = false;
+
+        //set WaterLinePoints and WaterLine
+        for (int i = 0; i < FloatPoints.Length; i++)
+        {
+            //height
+            WaterLinePoints[i] = FloatPoints[i].position;
+            WaterLinePoints[i].y = Waves.GetHeight(FloatPoints[i].position);
+            newWaterLine += WaterLinePoints[i].y / FloatPoints.Length;
+            if (WaterLinePoints[i].y > FloatPoints[i].position.y)
+                pointUnderWater = true;
+        }
+
+        var waterLineDelta = newWaterLine - WaterLine;
+        WaterLine = newWaterLine;
     }
 
     private void OnDrawGizmos()
