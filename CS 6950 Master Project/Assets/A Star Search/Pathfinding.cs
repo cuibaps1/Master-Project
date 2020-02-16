@@ -4,15 +4,16 @@ using UnityEngine;
 
 public class Pathfinding : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    Grid grid;
+
+    void Awake()
     {
-        
+        grid = GetComponent<Grid>();
     }
 
-    // Update is called once per frame
-    void Update()
+    void FindPath(Vector3 startPos, Vector3 targetPos)
     {
-        
+        Node startNode = grid.NodeFromWorldPoint(startPos);
+        Node targetNode = grid.NodeFromWorldPoint(targetPos);
     }
 }
