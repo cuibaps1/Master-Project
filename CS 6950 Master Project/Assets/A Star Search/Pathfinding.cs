@@ -1,9 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Pathfinding : MonoBehaviour
 {
+    public Transform seeker, target;
+
     Grid grid;
 
     void Awake()
@@ -11,9 +14,108 @@ public class Pathfinding : MonoBehaviour
         grid = GetComponent<Grid>();
     }
 
+    void Update()
+    {
+        FindPath(seeker.position, target.position);
+    }
+
+
     void FindPath(Vector3 startPos, Vector3 targetPos)
     {
         Node startNode = grid.NodeFromWorldPoint(startPos);
         Node targetNode = grid.NodeFromWorldPoint(targetPos);
+
+        //OPEN the set of nodes to be evaluated
+        List<Node> openSet = new List<Node>();
+        //CLOSED the set of nodes already evaluated
+        HashSet<Node> closedSet = new HashSet<Node>();
+        openSet.Add(startNode);
+
+        while (openSet.Count > 0)
+        {
+            Node node = openSet[0];
+            for (int i = 1; i < openSet.Count; i++)
+            {
+                //current = node in OPEN with the lowest f_cost
+                if (openSet[i].fCost < node.fCost || openSet[i].fCost == node.fCost)
+                {
+                    if (openSet[i].hCost < node.hCost)
+                        node = openSet[i];
+                }
+            }
+
+            //remove current from OPEN set
+            openSet.Remove(node);
+            //add to CLOSED set
+            closedSet.Add(node);
+
+            //if current is the target node
+            //path has been found
+            if (node == targetNode)
+            {
+                RetracePath(startNode, targetNode);
+                return;
+            }
+
+            //foreach neighbour of the current node
+            foreach (Node neighbour in grid.GetNeighbours(node))
+            {
+                //if neighbour is not traversable or neighbour is in CLOSED
+                if (!neighbour.walkable || closedSet.Contains(neighbour))
+                {
+                    //skip to the next neighbour
+                    continue;
+                }
+
+                //if new path to neighbour is shorter OR neighbour is not in OPEN
+                int newCostToNeighbour = node.gCost + GetDistance(node, neighbour);
+                if (newCostToNeighbour < neighbour.gCost || !openSet.Contains(neighbour))
+                {
+                    //calculating f_cost by sum of g_cost and h_cost
+                    neighbour.gCost = newCostToNeighbour;
+                    neighbour.hCost = GetDistance(neighbour, targetNode);
+                    //set parent of neighbour to current
+                    neighbour.parent = node;
+
+                    //if neighbour is not in OPEN
+                    //add neighbour to OPEN
+                    if (!openSet.Contains(neighbour))
+                        openSet.Add(neighbour);
+                }
+            }
+        }
+    }
+
+    //when the targetNode is found, need to retrace to startPos by using the parent to get the path from the startNode to the endNode
+    void RetracePath(Node startNode, Node endNode)
+    {
+        List<Node> path = new List<Node>();
+        Node currentNode = endNode;
+
+        while (currentNode != startNode)
+        {
+            path.Add(currentNode);
+            currentNode = currentNode.parent;
+        }
+        path.Reverse();
+
+        grid.path = path;
+
+    }
+
+    int GetDistance(Node nodeA, Node nodeB)
+    {
+        int dstX = Mathf.Abs(nodeA.gridX - nodeB.gridX);
+        int dstY = Mathf.Abs(nodeA.gridY - nodeB.gridY);
+
+        //count on x-axis of the start position to see how many nodes are away from the target postion
+        //count on y-axis of the start position to see how many nodes are away from the target postion
+        //14 is how much 1 diagnal move cost
+        //in the case distance x > distance y
+        if (dstX > dstY)
+            return 14 * dstY + 10 * (dstX - dstY);
+
+        //in the case distance y > distance x
+        return 14 * dstX + 10 * (dstY - dstX);
     }
 }
