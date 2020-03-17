@@ -120,6 +120,7 @@ public class Pathfinding : MonoBehaviour
             waypoints = RetracePath(startNode, targetNode);
         }
         requestManager.FinishedProcessingPath(waypoints, pathSuccess);
+        
     }
 
     //when the targetNode is found, need to retrace to startPos by using the parent to get the path from the startNode to the endNode

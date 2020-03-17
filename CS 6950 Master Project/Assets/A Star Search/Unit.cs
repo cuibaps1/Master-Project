@@ -9,15 +9,28 @@ public class Unit : MonoBehaviour
 {
 
 
-	public Transform target;
+	public Transform target, target1;
 	float speed = 20;
 	Vector3[] path;
 	int targetIndex;
 
 	void Start()
 	{
-		PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
+		StartCoroutine(DoMoving());
+		//PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
+		//PathRequestManager.RequestPath(transform.position, target1.position, OnPathFound);
 	}
+
+	IEnumerator DoMoving()
+	{
+		PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
+		yield return new WaitForSeconds(5f);
+
+		PathRequestManager.RequestPath(transform.position, target1.position, OnPathFound);
+		yield return new WaitForSeconds(2f);
+
+	}
+
 
 	public void OnPathFound(Vector3[] newPath, bool pathSuccessful)
 	{
