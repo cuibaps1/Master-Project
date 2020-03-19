@@ -27,7 +27,7 @@ public class Unit : MonoBehaviour
 		yield return new WaitForSeconds(5f);
 
 		PathRequestManager.RequestPath(transform.position, target1.position, OnPathFound);
-		yield return new WaitForSeconds(2f);
+		yield return new WaitForSeconds(1f);
 
 	}
 
