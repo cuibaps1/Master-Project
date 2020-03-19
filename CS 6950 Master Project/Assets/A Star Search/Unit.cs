@@ -9,7 +9,7 @@ public class Unit : MonoBehaviour
 {
 
 
-	public Transform target, target1;
+	public Transform target;
 	float speed = 20;
 	Vector3[] path;
 	int targetIndex;
@@ -24,10 +24,10 @@ public class Unit : MonoBehaviour
 	IEnumerator DoMoving()
 	{
 		PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
-		yield return new WaitForSeconds(5f);
+	//	yield return new WaitForSeconds(5f);
 
-		PathRequestManager.RequestPath(transform.position, target1.position, OnPathFound);
-		yield return new WaitForSeconds(1f);
+	//	PathRequestManager.RequestPath(transform.position, target1.position, OnPathFound);
+	//	yield return new WaitForSeconds(1f);
 
 	}
 
