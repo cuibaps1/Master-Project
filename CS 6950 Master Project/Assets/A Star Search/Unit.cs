@@ -16,21 +16,8 @@ public class Unit : MonoBehaviour
 
 	void Start()
 	{
-		StartCoroutine(DoMoving());
-		//PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
-		//PathRequestManager.RequestPath(transform.position, target1.position, OnPathFound);
-	}
-
-	IEnumerator DoMoving()
-	{
 		PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
-	//	yield return new WaitForSeconds(5f);
-
-	//	PathRequestManager.RequestPath(transform.position, target1.position, OnPathFound);
-	//	yield return new WaitForSeconds(1f);
-
 	}
-
 
 	public void OnPathFound(Vector3[] newPath, bool pathSuccessful)
 	{
